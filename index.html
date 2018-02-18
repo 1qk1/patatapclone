@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Patatap Clone</title>
+    <link rel="stylesheet" type="text/css" href="assets/css/style.css">
+    <script src="assets/js/lib/howler.min.js" type="text/javascript"></script>
+	<script src="assets/js/lib/paper-full.min.js"></script>
+	<script src="assets/js/keybinds.js"></script>
+    <script type="text/paperscript" canvas="myCanvas">
+    var myCircle = [];
+    function onKeyDown(event){
+        if (/^[a-z]$/.test(event.key)){
+			var maxPoint = new Point(view.size.width, view.size.height);
+			var randomPoint = Point.random() * maxPoint;
+            var newCircle = new Path.Circle(new Point(randomPoint), 500);
+            newCircle.fillColor = keybinds[event.key].color;
+            myCircle.push(newCircle);
+			keybinds[event.key].sound.play();
+        }
+    }
+    function onFrame(e){
+        if (myCircle.length !== 0){
+            for (var i = 0; i < myCircle.length;i++){
+                if (myCircle[i].bounds.width < 0.1){
+					myCircle[i].remove();
+					myCircle.splice(i, 1);
+                } else {
+                    myCircle[i].scale(0.9);
+                    myCircle[i].fillColor.hue-=4;
+                }
+            }
+        }
+    }
+    </script>
+    
+</head>
+<body>
+    <canvas id="myCanvas" resize></canvas>
+</body>
+</html>
